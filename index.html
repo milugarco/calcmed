@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+    <title>Calculadora de Média, Mediana e Moda</title>
+</head>
+
+<body>
+    <h1>Calculadora de Média, Mediana e Moda</h1>
+    <form id="form">
+        <label for="numeros">Digite uma lista de números separados por vírgula:</label>
+        <br>
+        <input type="text" id="numeros" name="numeros">
+        <br>
+        <button type="submit">Calcular</button>
+    </form>
+    <div id="resultado"></div>
+    
+    <script>
+        function calcularMediaMedianaModa(numeros) {
+            // Transforma a string de números em um array de números
+            const array = numeros.split(',').map(Number);
+
+            // Calcular a média
+            let soma = 0;
+            for (let i = 0; i < array.length; i++) {
+                soma += array[i];
+            }
+            const media = soma / array.length;
+
+            // Calcular a mediana
+            array.sort((a, b) => a - b);
+            let mediana;
+            if (array.length % 2 === 0) {
+                mediana = (array[array.length / 2 - 1] + array[array.length / 2]) / 2;
+            } else {
+                mediana = array[Math.floor(array.length / 2)];
+            }
+
+            // Calcular a moda
+            const frequencia = {};
+            let moda;
+            let maxFrequencia = 0;
+            for (let i = 0; i < array.length; i++) {
+                const valor = array[i];
+                frequencia[valor] = (frequencia[valor] || 0) + 1;
+                if (frequencia[valor] > maxFrequencia) {
+                    maxFrequencia = frequencia[valor];
+                    moda = valor;
+                }
+            }
+
+            return {
+                media: media,
+                mediana: mediana,
+                moda: moda,
+            };
+        }
+
+        const form = document.querySelector('#form');
+        const resultado = document.querySelector('#resultado');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const numeros = document.querySelector('#numeros').value;
+            const resultadoCalculo = calcularMediaMedianaModa(numeros);
+            resultado.innerHTML = `
+          <p>Média: ${resultadoCalculo.media}</p>
+          <p>Mediana: ${resultadoCalculo.mediana}</p>
+          <p>Moda: ${resultadoCalculo.moda}</p>
+        `;
+        });
+    </script>
+</body>
+
+</html>
